@@ -1,1 +1,29 @@
+name: Run Keeta Bot
 
+on:
+  schedule:
+    - cron: '*/15 * * * *' # প্রতি ১৫ মিনিট পর পর অটোমেটিক রান হবে
+  workflow_dispatch: # হাত দিয়ে ম্যানুয়ালি রান করার অপশন
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install requests
+
+      - name: Run Python Bot
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+        run: |
+          python bot.py
